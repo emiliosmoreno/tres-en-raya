@@ -27,9 +27,9 @@ class Casilla(sprite.Sprite):
         self.cambiar_imagen(turno)
 
     def cambiar_imagen(self, turno):
-        if turno == "bill":
+        if turno == "J1":
             self.image = pg.image.load("images/equis.png")
-        elif turno == "steve":
+        elif turno == "J2":
             self.image = pg.image.load("images/circulo.png")
 
     def limpiar(self):
@@ -37,41 +37,41 @@ class Casilla(sprite.Sprite):
         self.estado = False
 
 
-class JugadorBill(sprite.Sprite):
+class Jugador1(sprite.Sprite):
     def __init__(self):
-        super(JugadorBill, self).__init__()
-        self.image = pg.image.load("images/bill.jpg")
-        self.rect = self.image.get_rect()
-        self.rect.x = 20
-        self.rect.y = 75
+        super(Jugador1, self).__init__()
+        #self.image = pg.image.load("images/bill.jpg")
+        #self.rect = self.image.get_rect()
+        #self.rect.x = 20
+        #self.rect.y = 75
 
 
-class JugadorSteve(sprite.Sprite):
+class Jugador2(sprite.Sprite):
     def __init__(self):
-        super(JugadorSteve, self).__init__()
-        self.image = pg.image.load("images/steve.jpg")
-        self.rect = self.image.get_rect()
-        self.rect.x = 360
-        self.rect.y = 75
+        super(Jugador2, self).__init__()
+        #self.image = pg.image.load("images/steve.jpg")
+        #self.rect = self.image.get_rect()
+        #self.rect.x = 360
+        #self.rect.y = 75
 
 
 class EscenaJuego(object):
     def __init__(self):
-        self.turno = "bill"
+        self.turno = "J1"
         self.hay_ganador = False
         self.turnos = 9
         self.fondo = pg.image.load("images/escenario.jpg")
 
         #self.jugadores = pg.sprite.Group()
-        #self.jugadores.add(JugadorBill())
-        #self.jugadores.add(JugadorSteve())
+        #self.jugadores.add(Jugador1())
+        #self.jugadores.add(Jugador2())
 
         self.tablero = [[0, 0, 0],
                         [0, 0, 0],
                         [0, 0, 0]]
 
-        self.fila_bill = ["bill", "bill", "bill"]
-        self.fila_steve = ["steve", "steve", "steve"]
+        self.jugador1 = ["J1", "J1", "J1"]
+        self.jugador2 = ["J2", "J2", "J2"]
 
         self.crear_casillas_vacias()
 
@@ -79,9 +79,9 @@ class EscenaJuego(object):
         if self.hay_ganador:
             self.reiniciar()
 
-        if self.turno == "steve" and not self.hay_ganador:
+        if self.turno == "J2" and not self.hay_ganador:
             self.clic_autonomo()
-        elif self.turno == "bill" and not self.hay_ganador:
+        elif self.turno == "J1" and not self.hay_ganador:
             self.clic_autonomo()
 
         for event in pg.event.get():
@@ -115,23 +115,23 @@ class EscenaJuego(object):
     def verificar_empate(self):
         if not self.hay_ganador and self.turnos < 1:
             self.hay_ganador = True
-            print "Empate"
+            print ("Empate")
 
     def verificar_ganador_en_horizontal(self):
-        if self.fila_bill in self.tablero:
-            print "Ganó Bill en horizontal"
+        if self.jugador1 in self.tablero:
+            print ("Ganó Jugador1 en horizontal")
             self.hay_ganador = True
-        elif self.fila_steve in self.tablero:
-            print "Ganó Steve en horizontal"
+        elif self.jugador2 in self.tablero:
+            print ("Ganó Jugador2 en horizontal")
             self.hay_ganador = True
 
     def verificar_ganador_en_vertical(self):
         cols = [list(col) for col in zip(*self.tablero)]
-        if self.fila_bill in cols:
-            print "Ganó Bill en vertical"
+        if self.jugador1 in cols:
+            print ("Ganó Jugador1 en vertical")
             self.hay_ganador = True
-        elif self.fila_steve in cols:
-            print "Ganó Steve en vertical"
+        elif self.jugador2 in cols:
+            print ("Ganó Jugador2 en vertical")
             self.hay_ganador = True
 
     def verificar_ganador_en_diagonal(self):
@@ -143,11 +143,11 @@ class EscenaJuego(object):
                      self.tablero[1][1],
                      self.tablero[2][0]]
 
-        if diagonal1 == self.fila_bill or diagonal2 == self.fila_bill:
-            print "Ganó Bill en diagonal"
+        if diagonal1 == self.jugador1 or diagonal2 == self.jugador1:
+            print ("Ganó Jugador1 en diagonal")
             self.hay_ganador = True
-        elif diagonal1 == self.fila_steve or diagonal2 == self.fila_steve:
-            print "Ganó Steve en diagonal"
+        elif diagonal1 == self.jugador2 or diagonal2 == self.jugador2:
+            print ("Ganó Jugador2 en diagonal")
             self.hay_ganador = True
 
     def poner_ficha_en_tablero(self, casilla):
@@ -155,7 +155,7 @@ class EscenaJuego(object):
         self.tablero[fila][columna] = self.turno
 
     def cambiar_turno(self):
-        self.turno = 'steve' if self.turno == "bill" else 'bill'
+        self.turno = "J2" if self.turno == "J1" else "J1"
 
     def quitar_un_turno(self):
         self.turnos -= 1
